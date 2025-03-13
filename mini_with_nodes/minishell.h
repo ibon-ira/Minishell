@@ -36,6 +36,16 @@ typedef struct s_prompt
 	pid_t pid;
 }		t_prompt;
 */
+typedef struct s_node
+{
+	char	**full_cmd;
+	char	*full_path;
+	int		infile;
+	int		outfile;
+	int		is_exec;
+	pid_t	n_pid;
+}	t_node;
+
 typedef struct s_mini
 {
 	char ***total_cmd;
@@ -47,6 +57,7 @@ typedef struct s_mini
 	int splits;
 	int	ft_count_pipes;
 	char **envp;
+	t_node	**nodes;
 }	t_mini;
 
 //utils.c

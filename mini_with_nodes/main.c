@@ -32,10 +32,13 @@ char	*ft_print_user(void)
 	char	*simbol;
 	char	*userwithpwd;
 	char	*prompt;
+	char	*a;
 
+	a = "->";
 	pwd = getcwd(NULL, 0);
 	username = getenv("USER");
 	simbol = " \n> ";
+	a = ft_strjoin(username, a);
 	userwithpwd = ft_strjoin(username, pwd);
 	prompt = ft_strjoin(userwithpwd, simbol);
 	free(pwd);
