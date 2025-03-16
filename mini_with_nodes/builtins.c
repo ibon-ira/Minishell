@@ -69,5 +69,32 @@ void	echo(char **av, int flag)
 		printf("\n");
 }
 
+void	execute_builtin(char *s, t_mini *mini, int i)
+{
+	g_status = 0;
+	if (!ft_strncmp(s, "echo") && mini->nbr_nodes != 1)
+		ft_echo(mini->nodes[i], 1);
+	else if (!ft_strncmp(s, "echo") && mini->nbr_nodes == 1)
+		ft_echo(mini->nodes[i], mini->nodes[i]->outfile);
+	else if (!ft_strncmp(s, "cd"))
+		g_status = ft_cd(mini, mini->nodes[i], NULL, NULL);
+	else if (!ft_strncmp(s, "pwd") && mini->nbr_nodes != 1)
+		ft_pwd(1);
+	else if (!ft_strncmp(s, "pwd") && mini->nbr_nodes == 1)
+		ft_pwd(mini->nodes[i]->outfile);
+	else if (!ft_strncmp(s, "export") && mini->nbr_nodes != 1)
+		g_status = ft_export(mini, mini->nodes[i], 1);
+	else if (!ft_strncmp(s, "export") && mini->nbr_nodes == 1)
+		g_status = ft_export(mini, mini->nodes[i], mini->nodes[i]->outfile);
+	else if (!ft_strncmp(s, "unset"))
+		ft_unset(mini, mini->nodes[i], 1);
+	else if (!ft_strncmp(s, "env") && mini->nbr_nodes != 1)
+		g_status = ft_env(mini, mini->nodes[i], 1, 1);
+	else if (!ft_strncmp(s, "env") && mini->nbr_nodes == 1)
+		g_status = ft_env(mini, mini->nodes[i], 1, mini->nodes[i]->outfile);
+	else if (!ft_strncmp(s, "exit"))
+		g_status = ft_exit(mini, mini->nodes[i]);
+}
+
 //  Para la comprobacion del -n o cosas asi en vez de usar ft_strlen comprobar que no haya siguiente
 //	while (av[i] && ft_strncmp(av[i], "-n", 2) == 0 && !av[i][3])

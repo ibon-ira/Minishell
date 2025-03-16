@@ -42,7 +42,7 @@ typedef struct s_node
 	char	*full_path;
 	int		infile;
 	int		outfile;
-	int		is_exec;
+	int		is_set;
 	pid_t	n_pid;
 }	t_node;
 
@@ -58,6 +58,7 @@ typedef struct s_mini
 	int	ft_count_pipes;
 	char **envp;
 	t_node	**nodes;
+	int	nbr_nodes;
 }	t_mini;
 
 //utils.c
@@ -103,6 +104,13 @@ int	ft_count_pipes (char **commands);
 char	**ft_strdup2(char **commands, int	len, int first);
 int	ft_len_to_pipe (char **commands, int flag, int start, int first);
 
-void	ft_prepare_nodes(t_mini *data);
+int	ft_prepare_nodes(t_mini *data);
+void	ft_execute_commands(t_mini *data);
+char	*set_full_path(t_node *node);
+char	**set_full_cmd(char **commands, int i, int cmd);
+int	set_infile_outfile(t_node *node, char **commands, int outfile, int infile);
+int	get_here_doc(char *str[2], char *aux[2]);
+
+extern int	g_status;
 
 #endif

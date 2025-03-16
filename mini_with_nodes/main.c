@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+int	g_status = 0;
+
 void	print_logo(void)
 {
 	printf(GREEN "\n==== Welcome to minishell by Ibon & Iker ====\n");
@@ -96,7 +98,7 @@ char	*ft_print_user(void)
 	}
 	free_split(data->commands);
 	free(data);
-}*/
+}
 void	enter(t_mini *data)
 {
 	int		i;
@@ -168,7 +170,7 @@ void	enter(t_mini *data)
 	free_split(data->commands);
 	free(data);
 }
-
+*/
 int	ft_check_input(char *line)
 {
 	if (!detectopenquotes(line))
@@ -190,9 +192,10 @@ void	enterdata(char *line, char **envp, t_mini **data)
 //		adddata->commands = look_for_expansion(adddata->commands);
 		adddata->ft_count_pipes = ft_count_pipes (adddata->commands);
 		adddata->splits = ft_count_splits(line, ' ');
+		adddata->nbr_nodes = ft_count_pipes (adddata->commands) + 1;
 		*data = adddata;
-		ft_prepare_nodes(*data);
-//		ft_execute_commands(*data);
+		if(!ft_prepare_nodes(*data))
+			ft_execute_commands(*data);
 	}
 }
 
