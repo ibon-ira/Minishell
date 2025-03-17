@@ -2,14 +2,20 @@
 
 void	child_execution(t_mini *data, t_node *node)
 {
+    int i;
+
+    i = 0;
 //	if (!is_builtin(node->full_cmd[0])
 //		&& node->is_exec)
 //	{
-		if (execve(node->full_path, node->full_cmd, data->envp) == -1)
-		{
-			printf("%s : comand not found\n", node->full_cmd[0]);
-			exit (127);
-		}
+    while (node->full_cmd[i]){
+        remove_quotes(node->full_cmd[i++], 0);
+    }
+	if (execve(node->full_path, node->full_cmd, data->envp) == -1)
+	{
+		printf("%s : comand not found\n", node->full_cmd[0]);
+		exit (127);
+	}
 //	}
 //	else if (is_builtin(node->full_cmd[0])
 //		&& node->is_exec)
@@ -107,21 +113,28 @@ void	ft_execute_commands(t_mini *data)
 {
 	pid_t	pid;
 	int		pipefd[2];
+    int     i;
 
 	pid = 0;
+    i = 0;
 //	mini->signal = 1;
 //	init_signals(&((*data).signal));
 	if (data->nbr_nodes == 1)
-//	{
-//		if (is_builtin(data->nodes[0]->full_cmd[0])
-//			&& data->nodes[0]->is_set)
+	{
+        while (data->nodes[0]->full_cmd[i])
+		    remove_quotes(data->nodes[0]->full_cmd[i++], 0);
+        if (execute_builtin(data->nodes[0]->full_cmd, data->envp))
+            execute_simple_command(data, data->nodes[0], pid);
+/*		if (is_builtin(data->nodes[0]->full_cmd[0])
+			&& data->nodes[0]->is_set)
+            execute_builtin(data->nodes[0]->full_cmd[0], data->commands, data->env, &data);
 //			execute_builtin(data->nodes[0]->full_cmd[0], data, 0);
-//		else if (!is_builtin(data->nodes[0]->full_cmd[0])
-//			&& data->nodes[0]->is_set)
+		else if (!is_builtin(data->nodes[0]->full_cmd[0])
+			&& data->nodes[0]->is_set)
 			execute_simple_command(data, data->nodes[0], pid);
 //    printf("count->%i\n", data->ft_count_pipes);
 //    printf("nbr_nodes->%i\n",data->nbr_nodes);
-//	}
+*/	}
 	else if (data->nbr_nodes > 1)
 		excecute_pipe_sequence(data, pipefd);
 }

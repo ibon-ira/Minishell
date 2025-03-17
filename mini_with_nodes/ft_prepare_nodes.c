@@ -79,6 +79,5 @@ int	ft_prepare_nodes(t_mini *data)
         return(printf("syntax error: pipes\n"), 1);
     else
         data->nodes = ft_create_nodes(data);
-//    execve(data->nodes[0]->full_path, data->nodes[0]->full_cmd, data->envp);
     return (0);
 }

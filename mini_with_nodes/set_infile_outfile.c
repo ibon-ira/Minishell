@@ -42,7 +42,7 @@ int	second_case_aux(char **commands, int *outfile, int i)
 
 int	third_case_aux(char **commands, int *infile, int i)
 {
-	if (!ft_strncmp(commands[i - 1], "<<", 1))
+	if (!ft_strncmp(commands[i - 1], "<", 1))
 	{
 		if (*infile != STDIN_FILENO && *infile != -1)
 			close(*infile);

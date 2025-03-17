@@ -6,19 +6,55 @@
 /*   By: iksaiz-m <iksaiz-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 19:04:02 by iksaiz-m          #+#    #+#             */
-/*   Updated: 2025/02/23 20:21:33 by iksaiz-m         ###   ########.fr       */
+/*   Updated: 2025/03/17 20:47:32 by iksaiz-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-/*
-void	unset(char *argv)
+
+
+void	remove_env(char *argv, t_prompt **data)
 {
-	char *unset;
-	unset = getenv(argv);
-	unset = NULL;
-	// getenv(argv) = NULL;
-}*/
+	t_prompt	*tmp;
+	t_prompt	*var;
+
+	var = NULL;
+	tmp = *data;
+	while(tmp)
+	{
+		// Comparamos el valor de la variable de entorno con argv
+		if (ft_strncmp(argv, tmp->envp, ft_strlen(argv)) == 0 
+			&& tmp->envp[ft_strlen(argv)] == '=')
+		{
+			// Si estamos eliminando el primer nodo (cabeza de lista)
+			if (var == NULL)
+				*data = tmp->next;
+			else
+				var->next = tmp->next;
+			// Liberamos el espacio de memoria de la variable de entorno y el nodo
+			free(tmp->envp);
+			free(tmp);
+			return;  // Terminamos la función después de eliminar el nodo
+		}
+		// Continuamos recorriendo la lista
+		var = tmp;
+		tmp = tmp->next;
+	}
+}
+
+void	unset(char **argv, t_prompt **data)
+{
+	int	i;
+	t_prompt *unset;
+
+	unset = *data;
+	i = 1;
+	while (argv[i])
+	{
+		remove_env(argv[i], &unset);
+		i++;
+	}
+}
 
 void	pwd(int argc)
 {
@@ -67,33 +103,6 @@ void	echo(char **av, int flag)
 	}
 	if (flag == 1)
 		printf("\n");
-}
-
-void	execute_builtin(char *s, t_mini *mini, int i)
-{
-	g_status = 0;
-	if (!ft_strncmp(s, "echo") && mini->nbr_nodes != 1)
-		ft_echo(mini->nodes[i], 1);
-	else if (!ft_strncmp(s, "echo") && mini->nbr_nodes == 1)
-		ft_echo(mini->nodes[i], mini->nodes[i]->outfile);
-	else if (!ft_strncmp(s, "cd"))
-		g_status = ft_cd(mini, mini->nodes[i], NULL, NULL);
-	else if (!ft_strncmp(s, "pwd") && mini->nbr_nodes != 1)
-		ft_pwd(1);
-	else if (!ft_strncmp(s, "pwd") && mini->nbr_nodes == 1)
-		ft_pwd(mini->nodes[i]->outfile);
-	else if (!ft_strncmp(s, "export") && mini->nbr_nodes != 1)
-		g_status = ft_export(mini, mini->nodes[i], 1);
-	else if (!ft_strncmp(s, "export") && mini->nbr_nodes == 1)
-		g_status = ft_export(mini, mini->nodes[i], mini->nodes[i]->outfile);
-	else if (!ft_strncmp(s, "unset"))
-		ft_unset(mini, mini->nodes[i], 1);
-	else if (!ft_strncmp(s, "env") && mini->nbr_nodes != 1)
-		g_status = ft_env(mini, mini->nodes[i], 1, 1);
-	else if (!ft_strncmp(s, "env") && mini->nbr_nodes == 1)
-		g_status = ft_env(mini, mini->nodes[i], 1, mini->nodes[i]->outfile);
-	else if (!ft_strncmp(s, "exit"))
-		g_status = ft_exit(mini, mini->nodes[i]);
 }
 
 //  Para la comprobacion del -n o cosas asi en vez de usar ft_strlen comprobar que no haya siguiente

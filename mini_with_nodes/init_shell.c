@@ -113,10 +113,15 @@ int	other_actions(int argc, char **argv)
 	return (flag);
 }
 
-int	init_shell(int argc, char **argv, char **envp)
+int	execute_builtin(char **argv, char **envp)
 {
 	int	flag;
+	int	argc;
 
+	argc = 0;
+	while (argv[argc] != NULL)
+		argc++;
+	printf("count->%i\n", argc);
 	if (!envp)
 		printf("ok\n");
 	flag = 0;

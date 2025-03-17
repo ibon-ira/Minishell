@@ -36,6 +36,15 @@ typedef struct s_prompt
 	pid_t pid;
 }		t_prompt;
 */
+typedef struct s_prompt
+{
+	va_list *cmds;
+	// char **envp;
+	char *envp;
+	struct s_prompt *next;
+	pid_t pid;
+}		t_prompt;
+
 typedef struct s_node
 {
 	char	**full_cmd;
@@ -79,13 +88,13 @@ size_t	ft_num_word(char const *s, char c, size_t i, size_t num_word);
 void	echo(char **av, int flag);
 void	pwd(int argc);
 void	cd(int argc, char *av);
-void	unset(char *argv);
+void	unset(char **argv, t_prompt **data);
 
 //init_shell.c
 int		export_action(int argc, char **argv);
 int		fork_actions(int argc, char **argv, char **envp, int flag);
 int		other_actions(int argc, char **argv);
-int	init_shell(int argc, char **argv, char **envp);
+int	execute_builtin(char **argv, char **envp);
 //exit.c
 int		ft_exit(t_mini *data);
 //parse_imput.c
