@@ -32,3 +32,40 @@ split.c
 split.o
 utils.c
 utils.o
+zzz
+total 288
+-rw-r--r-- 1 root root  1407 Mar 25 12:26 Makefile
+-rw-r--r-- 1 root root   432 Mar 25 17:26 a
+-rw-r--r-- 1 root root     5 Mar 25 12:26 b
+-rw-r--r-- 1 root root  2508 Mar 25 12:26 builtins.c
+-rw-r--r-- 1 root root  8728 Mar 25 17:21 builtins.o
+-rw-r--r-- 1 root root  2397 Mar 25 12:26 commands.c
+-rw-r--r-- 1 root root     5 Mar 25 12:26 d
+-rw-r--r-- 1 root root  1708 Mar 25 17:13 exit.c
+-rw-r--r-- 1 root root  7832 Mar 25 17:21 exit.o
+-rw-r--r-- 1 root root   744 Mar 25 12:26 ft_check_redirections.c
+-rw-r--r-- 1 root root  3340 Mar 25 12:26 ft_count_pipes.c
+-rw-r--r-- 1 root root  7304 Mar 25 17:21 ft_count_pipes.o
+-rw-r--r-- 1 root root  3445 Mar 25 13:14 ft_execute_commands.c
+-rw-r--r-- 1 root root 11128 Mar 25 17:21 ft_execute_commands.o
+-rw-r--r-- 1 root root  1691 Mar 25 12:26 ft_prepare_nodes.c
+-rw-r--r-- 1 root root  8856 Mar 25 17:21 ft_prepare_nodes.o
+-rw-r--r-- 1 root root  1767 Mar 25 12:26 here_doc.c
+-rw-r--r-- 1 root root  7344 Mar 25 17:21 here_doc.o
+-rw-r--r-- 1 root root  3247 Mar 25 12:26 init_shell.c
+-rw-r--r-- 1 root root  9272 Mar 25 17:21 init_shell.o
+-rw-r--r-- 1 root root  7237 Mar 25 17:11 main.c
+-rw-r--r-- 1 root root 13656 Mar 25 17:21 main.o
+-rwxr-xr-x 1 root root 61848 Mar 25 17:21 minishell
+-rw-r--r-- 1 root root  3666 Mar 25 17:11 minishell.h
+-rw-r--r-- 1 root root  4034 Mar 25 13:28 parse_imput.c
+-rw-r--r-- 1 root root 10208 Mar 25 17:21 parse_imput.o
+-rw-r--r-- 1 root root  1659 Mar 25 12:26 set_full_cmd_path.c
+-rw-r--r-- 1 root root  7104 Mar 25 17:21 set_full_cmd_path.o
+-rw-r--r-- 1 root root  2331 Mar 25 17:21 set_infile_outfile.c
+-rw-r--r-- 1 root root  9840 Mar 25 17:21 set_infile_outfile.o
+-rw-r--r-- 1 root root  3455 Mar 25 12:26 split.c
+-rw-r--r-- 1 root root  8008 Mar 25 17:21 split.o
+-rw-r--r-- 1 root root  2153 Mar 25 12:26 utils.c
+-rw-r--r-- 1 root root  6088 Mar 25 17:21 utils.o
+-rw-r--r-- 1 root root     4 Mar 25 13:05 zzz

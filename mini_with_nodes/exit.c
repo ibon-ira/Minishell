@@ -12,11 +12,16 @@
 
 #include "minishell.h"
 
-int	ft_exit(t_mini *data)
+int	ft_exit(t_mini *data, int flag)
 {
 	int	i;
 	
 	i = 0;
+	if (flag == 1)
+	{	
+		printf("\033[31mFin.\033[0m\n");
+		exit(EXIT_SUCCESS);
+	}
 	while (data->commands[i])
 	{
 		printf("%i: %s\n", i, data->commands[i]);

@@ -70,6 +70,7 @@ typedef struct s_mini
 	char **envp;
 	t_node	**nodes;
 	int	nbr_nodes;
+	char	**bin_path;
 }	t_mini;
 
 //utils.c
@@ -98,7 +99,7 @@ int		fork_actions(int argc, char **argv, char **envp, int flag);
 int		other_actions(int argc, char **argv);
 int	execute_builtin(char **argv, char **envp);
 //exit.c
-int		ft_exit(t_mini *data);
+int		ft_exit(t_mini *data, int flag);
 //parse_imput.c
 /* int		parsequotes(t_mini *data);*/
 void	remove_quotes(char *imput, int i);
@@ -123,6 +124,7 @@ int	set_infile_outfile(t_node *node, char **commands, int outfile, int infile);
 int	get_here_doc(char *str[2], char *aux[2]);
 void ft_clean(t_mini *data);
 int	check_pipe_redir(char *s, int i);
+char	*ft_strdup(const char *s1);
 
 extern int	g_status;
 

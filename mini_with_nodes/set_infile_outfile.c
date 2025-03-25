@@ -22,7 +22,7 @@ void	check_heredoc(char *limit, int *infile)
 	while (1)
 	{
 		line = readline(">");
-		if (!ft_strncmp(line, limit, ft_strlen(limit)) && !line [ft_strlen(limit)])
+		if (!line || (!ft_strncmp(line, limit, ft_strlen(limit)) && !line [ft_strlen(limit)]))
 			break;
 		write(fd, line, strlen(line));
 		write(fd, "\n", 1);

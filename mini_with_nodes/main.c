@@ -190,13 +190,14 @@ void	enterdata(char *line, char **envp, t_mini **data)
 		adddata = malloc(sizeof (struct s_mini));
 //		set_bin_path(data);
 		adddata->envp = envp;
+//		set_bin_path(adddata);
 		adddata->commands = ft_split(line, ' ');
 //		adddata->commands = look_for_expansion(adddata->commands);
 		adddata->ft_count_pipes = ft_count_pipes (adddata->commands);
 		adddata->splits = ft_count_splits(line, ' ');
 		adddata->nbr_nodes = ft_count_pipes (adddata->commands) + 1;
 		*data = adddata;
-		ft_exit (*data);
+		ft_exit (*data, 0);
 		if(!ft_prepare_nodes(*data))
 			ft_execute_commands(*data);
 	}
@@ -218,6 +219,27 @@ int	exist(char *line)
 	return (0);
 }
 
+void handle_sigint(int sig)
+{
+    (void)sig;
+    printf("\n");          // Nueva línea
+    rl_on_new_line();      // Actualiza la línea de readline
+    rl_replace_line("", 0);// Borra el contenido actual
+    rl_redisplay();        // Redibuja el prompt
+}
+
+void handle_sigquit(int sig)
+{
+    (void)sig;
+    printf("\b\b  \b\b"); // Borra "^\" que imprime Bash
+}
+
+void setup_signals(void)
+{
+    signal(SIGINT, handle_sigint);
+    signal(SIGQUIT, handle_sigquit);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char	*line;
@@ -226,12 +248,19 @@ int	main(int argc, char **argv, char **envp)
 
 	data = NULL;
 	print_logo();
+	setup_signals();
 	// signal(SIGUSR1, signal_received);
 	// signal(SIGUSR2, signal_received);
 	while (argc && argv)
 	{
 		prompt = ft_print_user();
 		line = readline(prompt);
+		if (!line)  // Si readline devuelve NULL, usuario presionó Ctrl+D
+			ft_exit (NULL, 1);
+//        {
+//            printf("exit\n");
+//            exit(0);
+//        }
 		free(prompt);
 		if (exist(line) == 0)
 			write(1, "\0", 1);
