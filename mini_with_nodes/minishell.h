@@ -28,6 +28,8 @@
 #define GREEN "\033[32m"
 #define MAGENTA "\033[1;35m"
 #define RST "\033[0m"
+
+#define TEMP_FILE ".\vtemp\th"
 /*
 typedef struct s_prompt
 {
@@ -119,6 +121,8 @@ char	*set_full_path(t_node *node);
 char	**set_full_cmd(char **commands, int i, int cmd);
 int	set_infile_outfile(t_node *node, char **commands, int outfile, int infile);
 int	get_here_doc(char *str[2], char *aux[2]);
+void ft_clean(t_mini *data);
+int	check_pipe_redir(char *s, int i);
 
 extern int	g_status;
 

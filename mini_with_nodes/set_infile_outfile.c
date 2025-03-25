@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	check_heredoc(char *limit, int *infile)
+/*void	check_heredoc(char *limit, int *infile)
 {
 	char	*aux[2];
 	char	*str[2];
@@ -12,6 +12,24 @@ void	check_heredoc(char *limit, int *infile)
 	*infile = get_here_doc(str, aux);
 	if (*infile == -1)
 		*infile = STDIN_FILENO;
+}*/
+void	check_heredoc(char *limit, int *infile)
+{
+	int		fd;
+	char	*line;
+
+	fd = open(TEMP_FILE, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	while (1)
+	{
+		line = readline(">");
+		if (!ft_strncmp(line, limit, ft_strlen(limit)) && !line [ft_strlen(limit)])
+			break;
+		write(fd, line, strlen(line));
+		write(fd, "\n", 1);
+	}
+	close(fd);
+	*infile =  open(TEMP_FILE, O_RDONLY);
+	
 }
 
 int	first_case_aux(char **commands, int *outfile, int i)
@@ -42,7 +60,7 @@ int	second_case_aux(char **commands, int *outfile, int i)
 
 int	third_case_aux(char **commands, int *infile, int i)
 {
-	if (!ft_strncmp(commands[i - 1], "<", 1))
+	if (ft_strncmp(commands[i - 1], "<<", 2))
 	{
 		if (*infile != STDIN_FILENO && *infile != -1)
 			close(*infile);

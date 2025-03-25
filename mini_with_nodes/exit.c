@@ -36,3 +36,22 @@ int	ft_exit(t_mini *data)
 	}
 	return (0);
 }
+
+void ft_clean(t_mini *data)
+{
+	char *args[3];
+	pid_t	pid;
+	
+	args[0] = "rm";
+	args[1] = TEMP_FILE;
+	args[2] = NULL;
+	open(TEMP_FILE, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	pid = fork();
+	if (pid == -1)
+		return ;
+	else if (pid == 0)
+	{
+		execve("/bin/rm", args, data->envp);
+	}
+	wait(NULL);
+}

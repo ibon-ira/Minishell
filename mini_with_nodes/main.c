@@ -175,6 +175,8 @@ int	ft_check_input(char *line)
 {
 	if (!detectopenquotes(line))
 		return (printf("syntax error: dquote\n"), 1);
+	if (!check_pipe_redir(line, 0))
+		return (1);
 	return (0);
 }
 
@@ -194,6 +196,7 @@ void	enterdata(char *line, char **envp, t_mini **data)
 		adddata->splits = ft_count_splits(line, ' ');
 		adddata->nbr_nodes = ft_count_pipes (adddata->commands) + 1;
 		*data = adddata;
+		ft_exit (*data);
 		if(!ft_prepare_nodes(*data))
 			ft_execute_commands(*data);
 	}
@@ -204,6 +207,8 @@ int	exist(char *line)
 	int	i;
 
 	i = 0;
+	if (line[0] == '<' || line[0] == '>' || (line[0] == '>' && line[1] == '>'))
+	return (0);
 	while (line[i])
 	{
 		if (line[i] != ' ' && line[i] != '\0')

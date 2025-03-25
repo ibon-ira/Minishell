@@ -137,4 +137,6 @@ void	ft_execute_commands(t_mini *data)
 */	}
 	else if (data->nbr_nodes > 1)
 		excecute_pipe_sequence(data, pipefd);
+	if (TEMP_FILE)
+		ft_clean(data);
 }

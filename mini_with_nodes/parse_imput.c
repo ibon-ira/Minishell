@@ -12,6 +12,33 @@
 
 #include "minishell.h"
 
+int	check_pipe_redir(char *s, int i)
+{
+	while (s[i] != '\0')
+	{
+		if (s[i] == '|' && s[i + 1] == '|')
+			return (printf("syntax error: pipes\n"), 0);
+		else if (s[i] == '>' && (s[i + 1] == '<' || (s[i + 1] == '>'
+					&& s[i + 2] == '>' && s[i + 3] != '>')))
+			return (printf("syntax error: redir\n"), 0);
+		else if (s[i] == '<' && (s[i + 1] == '>' || (s[i + 1] == '<'
+					&& s[i + 2] == '<' && s[i + 3] != '<')))
+			return (printf("syntax error: redir\n"), 0);
+		else if (s[i] == '>' && s[i + 1] == '>' && s[i + 2] == '>'
+			&& s[i + 3] == '>')
+			return (printf("syntax error: redir\n"), 0);
+		else if (s[i] == '<' && s[i + 1] == '<' && s[i + 2] == '<'
+			&& s[i + 3] == '<')
+			return (printf("syntax error: redir\n"), 0);
+		else if (s[i] == '<' && s[i + 1] == '|')
+			return (printf("syntax error: redir\n"), 0);
+		else if (s[i] == '>' && s[i + 1] == '|')
+			return (printf("syntax error: redir\n"), 0);
+		i++;
+	}
+	return (1);
+}
+
 int	check_wrong_pipes(char **commands)
 {
 	int	i;
