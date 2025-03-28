@@ -94,27 +94,26 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (joinstring);
 }
 
-void	*ft_memset(void *b, int c, size_t len)
+char	*ft_strdup(const char *s1)
 {
-	unsigned int	i;
-	unsigned char	*ptr;
+	char	*str;
+	int		i;
+	int		j;
 
 	i = 0;
-	ptr = (unsigned char *)b;
-	while (i < len)
-	{
-		ptr[i] = c;
+	j = 0;
+	while (s1[i])
 		i++;
+	str = (char *)malloc (sizeof (char) * (i + 1));
+	if (str)
+	{
+		while (j < i)
+		{
+			str[j] = s1[j];
+			j++;
+		}
+		str[i] = '\0';
+		return (str);
 	}
-	return (b);
-}
-
-int	ft_strcmp(char *s1, char *s2)
-{
-	int	idx;
-
-	idx = 0;
-	while ((s1[idx] != '\0' && s2[idx] != '\0') && (s1[idx] == s2[idx]))
-		idx++;
-	return ((unsigned char)s1[idx] - (unsigned char)s2[idx]);
+	return (NULL);
 }

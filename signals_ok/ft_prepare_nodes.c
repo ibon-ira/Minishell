@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_create_nodes.c                                  :+:      :+:    :+:   */
+/*   ft_prepare_nodes.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iboiraza <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/08 22:49:49 by iboiraza          #+#    #+#             */
-/*   Updated: 2025/03/08 22:50:04 by iboiraza         ###   ########.fr       */
+/*   Created: 2025/03/28 11:35:25 by iboiraza          #+#    #+#             */
+/*   Updated: 2025/03/28 11:35:27 by iboiraza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 char	**get_next_node(char **tmp, char ***next)
 {
@@ -21,7 +20,7 @@ char	**get_next_node(char **tmp, char ***next)
 
 	count = 0;
 	i = 0;
-	while (tmp[count] && ft_strcmp(tmp[count], "|"))
+	while (tmp[count] && ft_strncmp(tmp[count], "|", 1))
 		count++;
 	elements = malloc(sizeof(char *) * (count + 1));
 	if (!elements)
@@ -33,13 +32,13 @@ char	**get_next_node(char **tmp, char ***next)
 	}
 	elements[i] = NULL;
 	tmp += count;
-	if (*tmp && !ft_strcmp(*tmp, "|"))
+	if (*tmp && !ft_strncmp(*tmp, "|", 1))
 		tmp++;
 	*next = tmp;
 	return (elements);
 }
 
-t_node	*create_exec_nodes_aux(t_mini *data, char **commands)
+t_node	*ft_create_nodes_aux(char **commands)
 {
 	t_node	*new;
 
@@ -49,17 +48,18 @@ t_node	*create_exec_nodes_aux(t_mini *data, char **commands)
 	new->infile = STDIN_FILENO;
 	new->outfile = STDOUT_FILENO;
 	new->full_cmd = set_full_cmd(commands, 0, 0);
-	new->full_path = set_full_path(new);
-	if (set_infile_outfile(new, commands, STDOUT_FILENO, STDIN_FILENO) == -1)
-		new->all_ok = 0;
+    new->full_path = set_full_path(new);
+    //	new->full_path = set_full_path(new, mini->bin_path);
+	if (!set_infile_outfile(new, commands, STDOUT_FILENO, STDIN_FILENO))
+		new->is_set = 0;
 	else
-		new->all_ok = 1;
+		new->is_set = 1;
 	new->n_pid = -1;
 	free(commands);
 	return (new);
 }
-/*
-t_node	**create_exec_nodes(t_mini *data, int nbr)
+
+t_node	**ft_create_nodes(t_mini *data)
 {
 	t_node	**nodes;
 	int		i;
@@ -67,44 +67,29 @@ t_node	**create_exec_nodes(t_mini *data, int nbr)
 	char	**next;
 
 	i = 0;
-	nodes = malloc(sizeof(t_node *) * (nbr + 1));
+	nodes = malloc(sizeof(t_node *) * (data->ft_count_pipes + 2));
 	if (nodes == NULL)
 		return (NULL);
-	mini->nbr_nodes = nbr;
-	tmp = mini->tokens;
-	while (nbr > 0)
+	tmp = data->commands;
+	while (data->ft_count_pipes >= 0)
 	{
 		tmp = get_next_node(tmp, &next);
-		nodes[i] = create_exec_nodes_aux(data, tmp);
+		nodes[i] = ft_create_nodes_aux(tmp);
 		tmp = next;
 		i++;
-		nbr--;
+		data->ft_count_pipes--;
 	}
 	nodes[i] = NULL;
 	return (nodes);
 }
-*/
-t_node  **ft_create_nodes(t_mini *data)
-{
-    t_node  **nodes;
-    int     i;
-    char    **temp;
-    char    **next;
 
-    i = 0;
-    nodes = malloc(sizeof(t_node *) * (data->ft_count_pipes + 2));
-    data->nbr_nodes = data->ft_count_pipes + 2;
-    while (data->commands[i])
-		remove_quotes(data->commands[i++], 0);
-	i = 0;
-	while (data->nbr_nodes > 0)
-	{
-		temp = get_next_node(temp, &next);
-		nodes[i] = create_exec_nodes_aux(data, temp);
-		temp = next;
-		i++;
-		data->nbr_nodes--;
-    }
-    nodes[i] = NULL;
-	return (nodes);
+int	ft_prepare_nodes(t_mini *data)
+{
+	if (!check_wrong_redir(data->commands))
+        return(printf("syntax error: redirection\n"), 1);
+    else if (!check_wrong_pipes(data->commands))
+        return(printf("syntax error: pipes\n"), 1);
+    else
+        data->nodes = ft_create_nodes(data);
+    return (0);
 }

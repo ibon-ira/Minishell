@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+int	g_status = 0;
+
 void	print_logo(void)
 {
 	printf(GREEN "\n==== Welcome to minishell by Ibon & Iker ====\n");
@@ -39,7 +41,7 @@ char	*ft_print_user(void)
 	username = getenv("USER");
 	simbol = " \n> ";
 	a = ft_strjoin(username, a);
-	userwithpwd = ft_strjoin(a, pwd);
+	userwithpwd = ft_strjoin(username, pwd);
 	prompt = ft_strjoin(userwithpwd, simbol);
 	free(pwd);
 	free(userwithpwd);
@@ -48,6 +50,26 @@ char	*ft_print_user(void)
 	return (prompt);
 }
 
+// void	enter(char *line, char **envp, t_mini **data)
+// {
+// 	char	**commands;
+// 	int		splits;
+// 	t_mini *adddata;
+
+// 	// adddata = NULL;
+// 	adddata = malloc(sizeof (struct s_mini));
+// 	add_history(line);
+// 	adddata->envp = envp;
+// 	adddata->full_cmd = ft_split(line, ' ');
+// 	commands = ft_split(line, ' ');
+// 	adddata->splits = ft_count_splits(line, ' ');
+// 	splits = ft_count_splits(line, ' ');
+// 	init_shell(splits, commands, envp);
+// 	*data = adddata;
+// 	//init_shell(adddata->splits, adddata->full_cmd, adddata->envp);
+// 	free_split(commands);
+// 	//free_split(adddata->full_cmd);
+// }
 /*void	enter(t_mini *data)
 {
 	int		i;
@@ -76,66 +98,36 @@ char	*ft_print_user(void)
 	}
 	free_split(data->commands);
 	free(data);
-}*/
-/*
-void	enter(t_mini *data)
-{
-	int		i;
-	int		len;
-	int		first;
-	char	***triple;
-	
-	i = 0;
-	len = 0;
-	first = 0;
-	triple = (char ***)malloc((data->ft_count_pipes + 2) * sizeof(char *));
-	while (data->commands[i])
-		remove_quotes(data->commands[i++], 0);
-	i = 0;
-	while (data->ft_count_pipes >= 0)
-	{
-		len = ft_len_to_pipe(data->commands, data->ft_count_pipes, i, first);
-		triple[first] = ft_strdup2(data->commands, len, first);
-		//str = ft_check_redirections(str, len);
-		first++;
-		data->ft_count_pipes--;
-		i = i + len + 1;
-	}
-	ft_do_pipes(triple, data);
-	free_split(data->commands);
-	free(data);
 }
-*/
 void	enter(t_mini *data)
 {
 	int		i;
-//	char	**str;
+	char	**str;
 	int		len;
 	int		first;
 	int		fd[2]; // Pipe
 	int		prev_fd; // Para almacenar el fd[0] del pipe anterior
 	pid_t	pid;
-	char	***triple;
 	
 	i = 0;
 	len = 0;
 	first = 0;
 	prev_fd = -1;
-	triple = (char ***)malloc((data->ft_count_pipes + 2) * sizeof(char *));
 	while (data->commands[i])
 		remove_quotes(data->commands[i++], 0);
 	i = 0;
 	while (data->ft_count_pipes >= 0)
 	{
 		len = ft_len_to_pipe(data->commands, data->ft_count_pipes, i, first);
-		triple[first] = ft_strdup2(data->commands, len, first);
-		triple[first] = ft_check_redirections(triple[first], len);
-	// Crear un pipe si hay más comandos
+		str = ft_strdup2(data->commands, len, first);
+		
+		// Crear un pipe si hay más comandos
 		if (data->ft_count_pipes > 0 && pipe(fd) == -1)
 		{
 			perror("pipe");
 			exit(1);
 		}
+
 		pid = fork();
 		if (pid == -1)
 		{
@@ -154,15 +146,17 @@ void	enter(t_mini *data)
 				dup2(fd[1], STDOUT_FILENO); // Escribir en el pipe
 				close(fd[0]); // Cerrar lectura en hijo
 			}
-			if (init_shell(data->splits, triple[first], data->envp))
-				not_builtin_command(triple[first], data->envp);
+			if (init_shell(data->splits, str, data->envp))
+				not_builtin_command(str, data->envp);
 			exit(0);
 		}
 		else // Proceso padre
 		{
 			wait(NULL); // Espera a que termine el hijo
+
 			if (prev_fd != -1)
 				close(prev_fd); // Cierra la lectura del pipe anterior
+
 			if (data->ft_count_pipes > 0)
 			{
 				close(fd[1]); // Cierra la escritura del pipe actual
@@ -176,19 +170,13 @@ void	enter(t_mini *data)
 	free_split(data->commands);
 	free(data);
 }
-void	ft_execute_commands(t_mini *data)
-{
-	if (!ft_check_redir_and_pipes(data))
-	{
-		data->nodes = ft_create_nodes(data);
-		ft_simple_or_pipes(data);
-	}
-}
-
+*/
 int	ft_check_input(char *line)
 {
 	if (!detectopenquotes(line))
 		return (printf("syntax error: dquote\n"), 1);
+	if (!check_pipe_redir(line, 0))
+		return (1);
 	return (0);
 }
 
@@ -200,14 +188,18 @@ void	enterdata(char *line, char **envp, t_mini **data)
 	if (!ft_check_input(line))
 	{
 		adddata = malloc(sizeof (struct s_mini));
-		set_bin_path(data);
+//		set_bin_path(data);
 		adddata->envp = envp;
+//		set_bin_path(adddata);
 		adddata->commands = ft_split(line, ' ');
 //		adddata->commands = look_for_expansion(adddata->commands);
 		adddata->ft_count_pipes = ft_count_pipes (adddata->commands);
 		adddata->splits = ft_count_splits(line, ' ');
+		adddata->nbr_nodes = ft_count_pipes (adddata->commands) + 1;
 		*data = adddata;
-		ft_execute_commands(*data);
+		ft_exit (*data, 0);
+		if(!ft_prepare_nodes(*data))
+			ft_execute_commands(*data);
 	}
 }
 
@@ -216,6 +208,8 @@ int	exist(char *line)
 	int	i;
 
 	i = 0;
+	if (line[0] == '<' || line[0] == '>' || (line[0] == '>' && line[1] == '>'))
+	return (0);
 	while (line[i])
 	{
 		if (line[i] != ' ' && line[i] != '\0')
@@ -223,6 +217,28 @@ int	exist(char *line)
 		i++;
 	}
 	return (0);
+}
+
+void handle_sigint(int sig)
+{
+    (void)sig;
+    printf("\n");          // Nueva línea
+    rl_on_new_line();      // Actualiza la línea de readline
+    rl_replace_line("", 0);// Borra el contenido actual
+    rl_redisplay();        // Redibuja el prompt
+}
+
+void handle_sigquit(int sig)
+{
+    (void)sig;
+//    printf("\b\b  \b\b"); // Borra "^\" que imprime Bash
+}
+
+void setup_signals(void)
+{
+    signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
+//	signal(SIGQUIT, handle_sigquit);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -233,13 +249,19 @@ int	main(int argc, char **argv, char **envp)
 
 	data = NULL;
 	print_logo();
-//	ft_memset(&data, 0, sizeof(data));
+	setup_signals();
 	// signal(SIGUSR1, signal_received);
 	// signal(SIGUSR2, signal_received);
 	while (argc && argv)
 	{
 		prompt = ft_print_user();
 		line = readline(prompt);
+		if (!line)  // Si readline devuelve NULL, usuario presionó Ctrl+D
+			ft_exit (NULL, 1);
+//        {
+//            printf("exit\n");
+//            exit(0);
+//        }
 		free(prompt);
 		if (exist(line) == 0)
 			write(1, "\0", 1);
@@ -248,3 +270,8 @@ int	main(int argc, char **argv, char **envp)
 	}
 	return (0);
 }
+/*char c;
+  char t;
+  
+  t = '\''; un character es comilla simple sin que te pete
+  c = '\"'; un character es comillas doble sin que te pete */

@@ -69,10 +69,8 @@ char **copy_strings(char **commands, int start, int len)
 
 char **ft_strdup2(char **commands, int len, int first)
 {
-    int start_index;
-	
-	start_index = find_start_index(commands, first);
-    return (copy_strings(commands, start_index, len));
+    int start_index = find_start_index(commands, first);
+    return copy_strings(commands, start_index, len);
 }
 /*
 char	**ft_strdup2(char **commands, int len, int first)

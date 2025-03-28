@@ -6,19 +6,55 @@
 /*   By: iksaiz-m <iksaiz-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 19:04:02 by iksaiz-m          #+#    #+#             */
-/*   Updated: 2025/02/23 20:21:33 by iksaiz-m         ###   ########.fr       */
+/*   Updated: 2025/03/17 20:47:32 by iksaiz-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-/*
-void	unset(char *argv)
+
+
+void	remove_env(char *argv, t_prompt **data)
 {
-	char *unset;
-	unset = getenv(argv);
-	unset = NULL;
-	// getenv(argv) = NULL;
-}*/
+	t_prompt	*tmp;
+	t_prompt	*var;
+
+	var = NULL;
+	tmp = *data;
+	while(tmp)
+	{
+		// Comparamos el valor de la variable de entorno con argv
+		if (ft_strncmp(argv, tmp->envp, ft_strlen(argv)) == 0 
+			&& tmp->envp[ft_strlen(argv)] == '=')
+		{
+			// Si estamos eliminando el primer nodo (cabeza de lista)
+			if (var == NULL)
+				*data = tmp->next;
+			else
+				var->next = tmp->next;
+			// Liberamos el espacio de memoria de la variable de entorno y el nodo
+			free(tmp->envp);
+			free(tmp);
+			return;  // Terminamos la función después de eliminar el nodo
+		}
+		// Continuamos recorriendo la lista
+		var = tmp;
+		tmp = tmp->next;
+	}
+}
+
+void	unset(char **argv, t_prompt **data)
+{
+	int	i;
+	t_prompt *unset;
+
+	unset = *data;
+	i = 1;
+	while (argv[i])
+	{
+		remove_env(argv[i], &unset);
+		i++;
+	}
+}
 
 void	pwd(int argc)
 {
