@@ -6,7 +6,7 @@
 #    By: iksaiz-m <iksaiz-m@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/21 11:25:51 by iboiraza          #+#    #+#              #
-#    Updated: 2025/02/16 20:26:25 by iksaiz-m         ###   ########.fr        #
+#    Updated: 2025/04/13 17:46:36 by iksaiz-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,9 +16,12 @@ READLINE	= -lreadline
 NAME		= minishell
 RM			= rm -rf
 
-CFILES = main.c builtins.c init_shell.c split.c utils.c exit.c parse_imput.c\
-			commands.c ft_count_pipes.c ft_check_redirections.c ft_do_pipes.c\
-			ft_check_redir_and_pipes.c ft_create_nodes.c ft_simple_or_pipes.c#ft_split_commands.c 
+CFILES = main.c split.c utils.c utils2.c builtins.c builtins_utils.c exit.c\
+			parse_imput.c ft_count_pipes.c ft_prepare_nodes.c\
+			ft_execute_commands.c set_full_cmd_path.c set_infile_outfile.c\
+			init_shell.c set_bin_path.c env_parsed.c split_utils.c\
+			env_parsed2.c utils3.c ft_execute_one_command.c signals.c\
+			more_parsing.c ft_print_prompt.c
 
 OFILES = $(CFILES:.c=.o)
 
