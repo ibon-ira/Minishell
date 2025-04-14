@@ -39,6 +39,7 @@ int	create_outfile(char **commands, int *outfile, int i)
 	if (*outfile == -1)
 	{
 		printf(" : No such file or directory\n");
+		g_status = 1;
 		return (0);
 	}
 	return (1);
@@ -52,6 +53,7 @@ int	append_outfile(char **commands, int *outfile, int i)
 	if (*outfile == -1)
 	{
 		printf(" : No such file or directory\n");
+		g_status = 1;
 		return (0);
 	}
 	return (1);
@@ -67,6 +69,7 @@ int	outfile_options(char **commands, int *infile, int i)
 		if (*infile == -1)
 		{
 			printf("%s : No such file or directory\n", commands[i]);
+			g_status = 1;
 			*infile = STDIN_FILENO;
 			return (0);
 		}

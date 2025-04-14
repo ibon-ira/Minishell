@@ -97,6 +97,7 @@ char	*ft_reasign(char *var_value, char *commands, int *i, int vname_len)
 		ft_strlen(commands) - (*i -1) - vname_len +1);
 	*i = *i - 1;
 	free(var_value);
+	free(commands);
 	return (new_command);
 }
 
@@ -105,9 +106,7 @@ char	*vars(char *commands, t_prompt *env, int i, int x)
 	int		s_quote;
 	int		d_quote;
 	char	*var_value;
-	char	*old_imput;
 
-	old_imput = commands;
 	s_quote = 0;
 	d_quote = 0;
 	while (commands[i] != '\0')
@@ -125,6 +124,5 @@ char	*vars(char *commands, t_prompt *env, int i, int x)
 		i++;
 		x = 0;
 	}
-	free(old_imput);
 	return (commands);
 }

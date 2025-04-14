@@ -119,6 +119,4 @@ void	ft_execute_commands(t_mini *data)
 		excecute_pipe_sequence(data, pipefd);
 	if (TEMP_FILE)
 		ft_clean(data);
-	if (g_status == 32512)
-		g_status = 127;
 }

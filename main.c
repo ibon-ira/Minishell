@@ -115,10 +115,8 @@ int	main(int argc, char **argv, char **envp)
 			write(1, "\0", 1);
 		if (exist(line))
 			enterdata(line, data, -1);
-		if (g_status == 512)
-			g_status = 2;
-		if (g_status == 256)
-			g_status = 1;
+		if (g_status != 2 && g_status != 1)
+			g_status = (g_status >> 8) & 0xFF;
 	}
 	return (0);
 }
