@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_count_pipes.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iboiraza <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: iksaiz-m <iksaiz-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 08:37:47 by iboiraza          #+#    #+#             */
-/*   Updated: 2025/04/07 14:31:59 by iboiraza         ###   ########.fr       */
+/*   Updated: 2025/04/24 20:49:56 by iksaiz-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,36 +64,6 @@ char	**copy_strings(char **commands, int start, int len, int k)
 	str[len] = NULL;
 	return (str);
 }
-
-/*char **copy_strings(char **commands, int start, int len, int k)
-{
-    char **str;
-    int i, v, j = start;
-
-    str = (char **)malloc((len + 1) * sizeof(char *));
-    if (!str)
-        return NULL;
-    while (k <= len && commands[j])
-    {
-        i = 0;
-        while (commands[j][i++])
-        str[k] = (char *)malloc((i + 1) * sizeof(char));
-        if (str[k])
-        {
-            v = 0;
-            while (v < i)
-            {
-                str[k][v] = commands[j][v];
-                v++;
-            }
-            str[k][v] = '\0';
-        }
-        k++;
-        j++;
-    }
-    str[len] = NULL;
-    return str;
-}*/
 
 char	**ft_strdup2(char **commands, int len, int first)
 {

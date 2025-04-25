@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_infile_outfile.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iboiraza <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: iksaiz-m <iksaiz-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 11:35:47 by iboiraza          #+#    #+#             */
-/*   Updated: 2025/03/28 11:35:49 by iboiraza         ###   ########.fr       */
+/*   Updated: 2025/04/24 20:23:54 by iksaiz-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,13 @@ void	check_heredoc(char *limit, int *infile)
 	while (1)
 	{
 		line = readline(">");
-		if (!line || (!ft_strncmp(line, limit, ft_strlen(limit))
+		if (!line)
+		{
+			printf("warning: here-document delimited by");
+			printf(" end-of-file (wanted `%s')\n", limit);
+			break ;
+		}
+		if ((!ft_strncmp(line, limit, ft_strlen(limit))
 				&& !line [ft_strlen(limit)]))
 			break ;
 		write(fd, line, strlen(line));

@@ -6,7 +6,7 @@
 /*   By: iksaiz-m <iksaiz-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 17:44:06 by iksaiz-m          #+#    #+#             */
-/*   Updated: 2025/04/13 18:54:08 by iksaiz-m         ###   ########.fr       */
+/*   Updated: 2025/04/24 20:11:28 by iksaiz-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,8 @@ void	asign_env_value(char *argv, t_prompt **data)
 		if (ft_strncmp(var_name[0], tmp->envp, ft_strlen(var_name[0])) == 0
 			&& tmp->envp[ft_strlen(var_name[0])] == '=')
 		{
-			tmp->envp = strdup(argv);
+			free(tmp->envp);
+			tmp->envp = ft_strdup(argv);
 			ft_free(var_name);
 			return ;
 		}
@@ -126,9 +127,8 @@ void	asign_env_value(char *argv, t_prompt **data)
 	var = malloc(sizeof(t_prompt));
 	if (!var)
 		return ;
-	var->envp = strdup(argv);
+	var->envp = ft_strdup(argv);
 	var->next = NULL;
 	ft_free(var_name);
 	ft_lstadd_back(data, var);
-	return ;
 }

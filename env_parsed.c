@@ -6,7 +6,7 @@
 /*   By: iksaiz-m <iksaiz-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 22:29:18 by iboiraza          #+#    #+#             */
-/*   Updated: 2025/04/13 18:51:05 by iksaiz-m         ###   ########.fr       */
+/*   Updated: 2025/04/24 20:39:11 by iksaiz-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,13 @@ char	*ft_reasign(char *var_value, char *commands, int *i, int vname_len)
 	new_command = NULL;
 	if (var_value == NULL)
 		return (new_command);
+	if (ft_strlen(var_value) == 0)
+	{
+		free(var_value);
+		var_value = ft_strdup("\"\"");
+	}
 	new_len = ft_strlen(commands) - vname_len + ft_strlen(var_value);
 	new_command = ft_calloc(new_len + 1, (sizeof(char)));
-	if (!new_command)
-		return (NULL);
 	ft_strlcpy(new_command, commands, *i);
 	ft_strlcpy(new_command + (*i -1), var_value, new_len +1);
 	len = ft_strlen(var_value);
